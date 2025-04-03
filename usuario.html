@@ -332,7 +332,9 @@
             { num: 19, odei: "LIMA", nombre: "ARMANZA BENITES IRINA IVANOVA", dni: "40827610", cargo: "ENCUESTADORA" },
             { num: 20, odei: "LIMA", nombre: "MENDOZA VELASQUEZ PATRICIA ALEXSANDRA", dni: "77485639", cargo: "ENCUESTADORA" },
             { num: 21, odei: "LIMA", nombre: "ROSILLO LEON VANESSA JACKELINE", dni: "40642600", cargo: "ENCUESTADORA" },
-            { num: 22, odei: "LIMA", nombre: "ZEGARRA ZAMBRANO NATHALY BRISSETTE", dni: "77387057", cargo: "ENCUESTADORA" }
+            { num: 22, odei: "LIMA", nombre: "ZEGARRA ZAMBRANO NATHALY BRISSETTE", dni: "77387057", cargo: "ENCUESTADORA" },
+            { num: 23, odei: "LIMA", nombre: "DAMARI EVELI DIAZ DIAZ", dni: "47666771", cargo: "INSTRUCTORA" },
+            { num: 24, odei: "LIMA", nombre: "CECILIA KELY LOPEZ YAURI", dni: "42893718", cargo: "INSTRUCTORA" }
         ];
         
         // Función para obtener encuestador por DNI
@@ -445,7 +447,8 @@
                             
                             <div class="info-group">
                                 <h3>Rol en ENDES</h3>
-                                <p>Personal encargado de realizar entrevistas directas a los hogares seleccionados, recopilando información demográfica y de salud familiar mediante el uso de tablets.</p>
+
+                                <p> ${encuestador.cargo == "INSTRUCTORA"? "Personal encargado de supervisar las entrevistas directas a los hogares seleccionados" : "Personal encargado de realizar entrevistas directas a los hogares seleccionados, recopilando información demográfica y de salud familiar mediante el uso de tablets."}</p>
                             </div>
                         </div>
                     </div>
