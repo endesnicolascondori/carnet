@@ -111,14 +111,10 @@
         .photo {
             width: 100px;
             height: 120px;
-            border: none;
             border-radius: 10px;
             background-color: #f9f9f9;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            position: relative;
-            overflow: hidden;
+            background-size: cover;
+            background-position: center;
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
         }
         
@@ -424,53 +420,62 @@
             });
         }
         
-        // Crear todas las tarjetas
+        
+        // Función para verificar si una imagen existe (para fallback)
+        function checkImageExists(url, callback) {
+            const img = new Image();
+            img.onload = () => callback(url);
+            img.onerror = () => callback('https://endesnicolascondori.github.io/carnet/usuarios/default.jpg'); // Fallback
+            img.src = url;
+        }
+
+        // Crear todas las tarjetas con background-image
         function createAllCards() {
             const container = document.getElementById('cardsContainer');
-            container.innerHTML = ''; // Limpiar el contenedor
-            
+            container.innerHTML = '';
+
             const currentDate = getCurrentDate();
             const expiryDate = getExpiryDate();
-            
+
             data.forEach(person => {
                 const cardId = `card-${person.dni}`;
-                
-                const cardHtml = `
-                    <div class="id-card" id="${cardId}" data-region="${person.odei}">
-                        <div class="header">
-                            <div class="logo">
-                                <img src="https://endesnicolascondori.github.io/carnet/usuarios/logo.png" alt="Logo">
-                                ENDES
-                            </div>
-                            
-                        </div>
-                        <div class="card-body">
-                            <div class="photo-section">
-                                <div class="photo">
-                                    <img src="/usuarios/${person.dni}.jpeg" onerror="this.onerror=null; this.src='https://endesnicolascondori.github.io/carnet/usuarios/${person.dni}.jpg';" alt="Foto ${person.nombre}">
+                const photoUrlJpeg = `/usuarios/${person.dni}.jpeg`;
+                const photoUrlJpg = `https://endesnicolascondori.github.io/carnet/usuarios/${person.dni}.jpg`;
+
+                // Verificar si .jpeg existe, si no usar .jpg
+                checkImageExists(photoUrlJpeg, finalUrl => {
+                    const cardHtml = `
+                        <div class="id-card" id="${cardId}" data-region="${person.odei}">
+                            <div class="header">
+                                <div class="logo">
+                                    <img src="https://endesnicolascondori.github.io/carnet/usuarios/logo.png" alt="Logo">
+                                    ENDES
                                 </div>
                             </div>
-                            <div class="details">
-                                <div class="name">${person.nombre}</div>
-                                <div class="posicion">
-                                    <div class="caja1">
-                                        <div class="position">${person.cargo}</div>
-                                        <div class="info-row">
-                                            <div>${person.dni}</div>
+                            <div class="card-body">
+                                <div class="photo-section">
+                                    <div class="photo" style="background-image: url('${finalUrl}');"></div>
+                                </div>
+                                <div class="details">
+                                    <div class="name">${person.nombre}</div>
+                                    <div class="posicion">
+                                        <div class="caja1">
+                                            <div class="position">${person.cargo}</div>
+                                            <div class="info-row">
+                                                <div>${person.dni}</div>
+                                            </div>
                                         </div>
+                                        <div class="qr-code" id="qrcode-${person.dni}"></div>
                                     </div>
-                                    <div class="qr-code" id="qrcode-${person.dni}"></div>
                                 </div>
                             </div>
+                            <button class="download-btn" onclick="downloadCard('${cardId}')">Descargar</button>
                         </div>
-                        <button class="download-btn" onclick="downloadCard('${cardId}')">Descargar</button>
-                    </div>
-                `;
-                
-                container.insertAdjacentHTML('beforeend', cardHtml);
-                
-                // Generar código QR después de insertar el HTML
-                setTimeout(() => {
+                    `;
+
+                    container.insertAdjacentHTML('beforeend', cardHtml);
+
+                    // Generar QR
                     new QRCode(document.getElementById(`qrcode-${person.dni}`), {
                         text: `https://endesnicolascondori.github.io/carnet/usuario.html?dni=${person.dni}`,
                         width: 80,
@@ -479,7 +484,7 @@
                         colorLight: "#ffffff",
                         correctLevel: QRCode.CorrectLevel.H
                     });
-                }, 100);
+                });
             });
         }
         
@@ -496,24 +501,31 @@
                 }
             });
         }
-        
+
+
+        // Asegura que la imagen esté completamente cargada antes de capturar
+        function ensureImageLoaded(img, callback) {
+            if (img.complete) {
+                callback();
+            } else {
+                img.onload = callback;
+                img.onerror = callback;
+            }
+        }
+                
         // Función para descargar una tarjeta específica como PNG
+        
+        // Descargar una tarjeta individual
         function downloadCard(cardId) {
             const card = document.getElementById(cardId);
-            
-            // Ocultar temporalmente el botón de descarga para la captura
             const downloadBtn = card.querySelector('.download-btn');
             downloadBtn.style.display = 'none';
-            
+
             html2canvas(card).then(canvas => {
-                // Mostrar nuevamente el botón
                 downloadBtn.style.display = 'block';
-                
-                // Obtener el nombre desde la tarjeta
                 const nameElement = card.querySelector('.name');
                 const fileName = nameElement ? nameElement.textContent.replace(/\s+/g, '_') : 'id_card';
-                
-                // Crear enlace de descarga
+
                 const link = document.createElement('a');
                 link.download = `${fileName}_ID_Card.png`;
                 link.href = canvas.toDataURL('image/png');
@@ -521,43 +533,36 @@
             });
         }
         
-        // Función para descargar todas las tarjetas como PNG
+        // Descargar todas las tarjetas visibles
         function downloadAllCards() {
             const selectedRegion = document.getElementById('regionFilter').value;
             const cards = document.querySelectorAll('.id-card');
-            
-            // Filtrar tarjetas visibles según la región seleccionada
             const visibleCards = [...cards].filter(card => {
                 return selectedRegion === 'all' || card.getAttribute('data-region') === selectedRegion;
             });
-            
-            // Ocultar temporalmente todos los botones de descarga
+
             const downloadBtns = document.querySelectorAll('.download-btn');
             downloadBtns.forEach(btn => btn.style.display = 'none');
-            
+
             let processedCards = 0;
-            
+
             visibleCards.forEach((card, index) => {
                 setTimeout(() => {
                     html2canvas(card).then(canvas => {
-                        // Obtener el nombre desde la tarjeta
                         const nameElement = card.querySelector('.name');
                         const fileName = nameElement ? nameElement.textContent.replace(/\s+/g, '_') : `id_card_${index + 1}`;
-                        
-                        // Crear enlace de descarga
+
                         const link = document.createElement('a');
                         link.download = `${fileName}_ID_Card.png`;
                         link.href = canvas.toDataURL('image/png');
                         link.click();
-                        
+
                         processedCards++;
-                        
-                        // Mostrar nuevamente los botones cuando todas las tarjetas hayan sido procesadas
                         if (processedCards === visibleCards.length) {
                             downloadBtns.forEach(btn => btn.style.display = 'block');
                         }
                     });
-                }, index * 500); // Retraso escalonado para evitar problemas con múltiples descargas
+                }, index * 500);
             });
         }
         
