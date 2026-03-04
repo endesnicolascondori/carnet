@@ -310,16 +310,17 @@
         }
         
         // Base de datos de encuestadores (en una aplicación real, esto se obtendría de un servidor)
-        const encuestadoresDB = [
-        { num: 1, odei: "LIMA", nombre: "GOMEZ SOPLA ANIKEIDY", dni: "74419295", cargo: "ENCUESTADORA" },
-        { num: 2, odei: "LIMA", nombre: "JARA TICONA LISBETH", dni: "71291719", cargo: "ENCUESTADORA" },
-        { num: 3, odei: "LIMA", nombre: "AVALO ALMIDON ANELY", dni: "44362736", cargo: "ENCUESTADORA" },
-        { num: 4, odei: "LIMA", nombre: "AYALA BALDEON KATHERINE NICOLE", dni: "72494293", cargo: "ENCUESTADORA" },
-        { num: 5, odei: "LIMA", nombre: "LAZO ALIAGA ROCIO PILAR", dni: "70435695", cargo: "ENCUESTADORA" },
-        { num: 6, odei: "LIMA", nombre: "CASTRO TORRES ASTRID", dni: "70766448", cargo: "ENCUESTADORA" },
-        { num: 7, odei: "LIMA", nombre: "QUICO PUNTACA NAYDA", dni: "71647934", cargo: "ENCUESTADORA" },
-        { num: 8, odei: "LIMA", nombre: "ESLAVA JUAREZ RUTH NOEMI", dni: "70141703", cargo: "ENCUESTADORA" }
-        ];
+        const encuestadoresDB  = [
+            { num: 1, odei: "LIMA", nombre: "PADILLA YAULI AURA YADIRA", dni: "74504253", cargo: "ANTROPOMETRISTA" },
+            { num: 2, odei: "LIMA", nombre: "FARROÑAY SANCHEZ JOSHEVET SEFORA", dni: "75110038", cargo: "ANTROPOMETRISTA" },
+            { num: 3, odei: "LIMA", nombre: "PEREYRA TITO FRESCIA MARIELLA", dni: "75967533", cargo: "ANTROPOMETRISTA" },
+            { num: 4, odei: "LIMA", nombre: "ROCA ALEGRIA GRECIA SILVANA", dni: "73375008", cargo: "ANTROPOMETRISTA" },
+            { num: 5, odei: "LIMA", nombre: "MENDOZA KARI JOSSELYN LORENA", dni: "73033856", cargo: "ANTROPOMETRISTA" },
+            { num: 6, odei: "LIMA", nombre: "CHINGEL YAJAHUANCA DEYSI", dni: "71003227", cargo: "ANTROPOMETRISTA" },
+            { num: 7, odei: "LIMA", nombre: "LEAL PAZ TATIANA ISABEL", dni: "72085220", cargo: "ANTROPOMETRISTA" },
+            { num: 8, odei: "LIMA", nombre: "MESIAS RIVA NADIA DOMINIKA", dni: "72169273", cargo: "ANTROPOMETRISTA" },
+            { num: 9, odei: "LIMA", nombre: "ALBARRÁN PÉREZ ELIZABETH", dni: "46139962", cargo: "ANTROPOMETRISTA" }
+            ];
         
         // Función para obtener encuestador por DNI
         function getEncuestadorByDNI(dni) {
@@ -398,7 +399,7 @@
                     </div>
                     <div class="profile-body">
                         <div class="profile-photo">
-                            <img src="https://endesnicolascondori.github.io/carnet/usuarios/${encuestador.dni}.jpg" onerror="this.onerror=null; this.src='https://endesnicolascondori.github.io/carnet/usuarios/${encuestador.dni}.jpg';" alt="Foto de ${encuestador.nombre}">
+                            <img src="https://endesnicolascondori.github.io/carnet/usuarios/${encuestador.dni}.jpeg" onerror="this.onerror=null; this.src='https://endesnicolascondori.github.io/carnet/usuarios/${encuestador.dni}.jpeg';" alt="Foto de ${encuestador.nombre}">
                         </div>
                         <div class="profile-info">
                             <div class="info-group">
